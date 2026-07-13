@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Forge test",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "forge",
+      "runtimeArgs": ["test", "-vvv"],
+      "console": "integratedTerminal"
+    }
+  ]
+}
+

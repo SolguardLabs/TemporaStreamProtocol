@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "forge: build",
+      "type": "shell",
+      "command": "forge build",
+      "problemMatcher": []
+    },
+    {
+      "label": "forge: test",
+      "type": "shell",
+      "command": "forge test",
+      "problemMatcher": []
+    },
+    {
+      "label": "forge: fmt check",
+      "type": "shell",
+      "command": "forge fmt --check",
+      "problemMatcher": []
+    },
+    {
+      "label": "ci",
+      "type": "shell",
+      "command": "bash scripts/ci.sh",
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}
+
