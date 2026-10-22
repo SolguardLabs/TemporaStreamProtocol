@@ -33,7 +33,7 @@ run_forge() {
     return
   fi
   if is_wsl; then
-    echo "native forge not found in WSL; install Foundry in WSL or use scripts/tests.ps1" >&2
+    echo "native forge not found in WSL; install Foundry in WSL or run forge.exe from PowerShell" >&2
   else
     echo "forge not found" >&2
   fi
