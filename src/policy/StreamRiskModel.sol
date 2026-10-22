@@ -153,7 +153,8 @@ library StreamRiskModel {
             return 0;
         }
         return
-            (minRemainingBalanceWad - remainingWad).divWadDown(minRemainingBalanceWad)
+            (minRemainingBalanceWad - remainingWad)
+                .divWadDown(minRemainingBalanceWad)
                 .mulWadDown(100);
     }
 

@@ -4,6 +4,7 @@ pragma solidity ^0.8.26;
 import { ITemporaStreamProtocol } from "../src/interfaces/ITemporaStreamProtocol.sol";
 import { MockERC20 } from "../src/mocks/MockERC20.sol";
 import { TemporaStreamProtocol } from "../src/TemporaStreamProtocol.sol";
+import { TemporaScheduleLens } from "../src/lens/TemporaScheduleLens.sol";
 
 interface Vm {
     function warp(
@@ -58,6 +59,23 @@ contract TemporaStreamProtocolTest {
         _assertEq(reserve.totalEscrowed, RATE * DURATION, "escrowed");
         _assertEq(protocol.payerStreamCount(payer), 1, "payer streams");
         _assertEq(protocol.beneficiaryStreamCount(beneficiary), 1, "beneficiary streams");
+    }
+
+    function testScheduleLensProjectsAnActiveWindow() public {
+        uint256 streamId = _createStream(payer, beneficiary, DURATION, RATE, true);
+        TemporaScheduleLens lens = new TemporaScheduleLens();
+        TemporaScheduleLens.Projection memory projection =
+            lens.project(ITemporaStreamProtocol(address(protocol)), streamId, 90);
+
+        _assertEq(projection.incrementalPrincipal, 90 ether, "window principal");
+        _assertEq(projection.claimableNow, 0, "not yet accrued");
+        _assertEq(projection.remainingBalance, 1000 ether, "remaining balance");
+
+        vm.warp(START_TIME + 20);
+        vm.prank(payer);
+        protocol.pauseStream(streamId);
+        projection = lens.project(ITemporaStreamProtocol(address(protocol)), streamId, 90);
+        _assertEq(projection.incrementalPrincipal, 0, "paused projection");
     }
 
     function testBeneficiaryClaimsPrincipalForElapsedWindow() public {

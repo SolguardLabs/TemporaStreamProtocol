@@ -1,12 +1,23 @@
-# Security Policy
+# Política de seguridad
 
 ## Modelo De Seguridad
 
 TemporaStreamProtocol asume que los tokens configurados cumplen la interfaz
 ERC-20 estandar y que los gestores de reserva son cuentas operativas de
-confianza. Los pagadores solo arriesgan el principal que aprueban y bloquean al
-crear streams. Los beneficiarios solo deben poder reclamar principal devengado
-por ventanas activas y rendimiento atribuido por el indice del activo.
+confianza. Los pagadores comprometen el principal que aprueban y bloquean al
+crear streams. Las reclamaciones se calculan desde el estado temporal y el
+índice vigente de la reserva.
+
+```mermaid
+flowchart TD
+    S[Solicitud] --> A{Participante o rol autorizado}
+    A -->|No| X[Rechazo]
+    A -->|Sí| E{Estado del stream y reserva}
+    E -->|No| X
+    E -->|Sí| C[Cálculo de obligaciones]
+    C --> L[Liquidación y evento]
+    L --> R[Reconciliación de principal y buffer]
+```
 
 ## Invariantes Esperadas
 
